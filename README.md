@@ -1,5 +1,4 @@
-# Evaluation of p53 Immunohistochemical Expression Using Open-Source Software for Digital Image Analysis.
-Alcides Chaux, M.D.; Arthur L. Burnett, M.D., M.B.A.; George J. Netto, M.D.  
+# Evaluation of p53 Immunohistochemical Expression Using Open-Source Software for Digital Image Analysis. A Tissue Microarray Study of Penile Squamous Cell Carcinomas
 
 # Summary
 The addition of molecular biomarkers is needed to increase the accuracy of pathologic factors as prognosticators of outcome in penile squamous cell carcinomas (SCC). Evaluation of these biomarkers is usually carried out by immunohistochemistry. Herein we assess p53 immunohistochemical expression on tissue samples of penile SCC using freely-available, open-source software packages for digital image analysis. We also compared the results of digital analysis with standard visual estimation. Percentages of p53 positive cells were higher by visual estimation than by digital analysis. However, correlation was high between both methods. Our study shows that evaluation of p53 immunohistochemical expression is feasible using open-source software packages for digital image analysis. Although our analysis was limited to penile SCC, the rationale should also hold for other tumor types in which evaluation of p53 immunohistochemical expression is required. This approach would reduce interobserver variability, and would provide a standardized method for reporting the results of immunohistochemical stains. As these diagnostic tools are freely-available online, researchers and practicing pathologists could incorporate them in their daily practice without increasing diagnostic costs.
@@ -506,3 +505,10 @@ with(Data_AVG, descriptive.numerical.group(ijp53, grade))
 
 # Conclusions
 Evaluation of p53 immunohistochemical expression is feasible using open-source software packages for digital image analysis. Although our analysis was limited to penile SCC, the rationale should also hold for other tumor types in which evaluation of p53 expression is required. This approach would reduce interobserver variability, and would provide a standardized method for reporting the results of immunohistochemical stains. As these diagnostic tools are freely available over the Internet, researchers and practicing pathologists could incorporate them in their daily practice without increasing diagnostic costs.
+
+# Authors
+* __Alcides Chaux, M.D.__ _Department of Pathology, Johns Hopkins Medical Institutions, Baltimore, MD; Department of Scientific Research, Norte University, Asunción._ Dr. Chaux was in charge of evaluation of p53 immunohistochemical expression, data analysis, and drafting of the manuscript.
+* __George J. Netto, M.D.__ _Departments of Urology, Oncology, and Pathology, Johns Hopkins Medical Institutions, Baltimore, MD._ Dr. Netto was in charge of histopathological diagnosis, evaluation of 53 immunohistochemical expression, and supervision of the study.
+* __Arthur L. Burnett, M.D.__ _Department of Urology, Johns Hopkins Medical Institutions, Baltimore, MD._ Dr. Burnett was in charge of supervision of the study.
+
+All authors read and approved the final manuscript. Authors declare no conflict of interests.
