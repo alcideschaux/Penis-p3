@@ -1,4 +1,4 @@
-# Evaluation of p53 Immunohistochemical Expression Using Open-Source Software for Digital Image Analysis
+# Evaluation of p53 Immunohistochemical Expression Using Open-Source Software for Digital Image Analysis.
 Alcides Chaux, M.D.; Arthur L. Burnett, M.D., M.B.A.; George J. Netto, M.D.  
 
 # Summary
@@ -9,11 +9,11 @@ This repository contains the full statistical analysis of the dataset that was u
 
 This repository also contains the following files:
 
-* The [.pdf version]() of the article
-* The [BibTeX]() file containing all the references cited in the article
-* The [R script]() that was used for analyzing the dataset and writing the article
-* The [R Markdown]() file used for this report
-* The [figures]() included in this report in PNG format
+* The [.pdf version](https://github.com/alcideschaux/Penis-p53/blob/master/Article/p53_Penile.pdf) of the article sent for consideration of publication
+* The [BibTeX](https://github.com/alcideschaux/Penis-p53/blob/master/Article/References.bib) file containing all the references cited in the article
+* The [R script](https://github.com/alcideschaux/Penis-p53/blob/master/Article/p53_Penile.R) that was used for analyzing the dataset and writing the article
+* The [R Markdown](https://github.com/alcideschaux/Penis-p53/blob/master/README.Rmd) file used for this report
+* The [figures](https://github.com/alcideschaux/Penis-p53/tree/master/README_files/figure-html) included in this report in PNG format
 
 Data were analyzed using [R](http://www.r-project.org/) version 3.2.2 "Fire Safety" (R Foundation for Statistical Computing, Vienna, Austria). Results were written using R markdown inside [RStudio](http://www.rstudio.com/) version 0.99.441, powered by the [knitr](http://cran.r-project.org/web/packages/knitr/index.html) package version 1.11.
 
@@ -108,7 +108,9 @@ We will convert the long format of the dataset into a wide format for showing th
 
 
 ```r
-Data_Wide <- Data %>% group_by(caseid, subtype) %>% summarize(grade = max(grade, na.rm = TRUE))
+Data_Wide <- Data %>%
+  group_by(caseid, subtype) %>%
+  summarize(grade = max(grade, na.rm = TRUE))
 ```
 
 For the plots we will use the `ggplot2` package with a personalized theme.
@@ -129,7 +131,8 @@ The distribution plots are shown below.
 
 
 ```r
-ggplot(Data_Wide, aes(x = reorder(subtype, -table(subtype)[subtype]), fill = subtype)) +
+ggplot(Data_Wide,
+  aes(x = reorder(subtype, -table(subtype)[subtype]), fill = subtype)) +
   geom_bar(color = "black") +
   geom_text(stat = "bin", aes(label = ..count..), vjust = -1, size = 4) +
   ggtitle("Distribution of histologic subtypes") +
@@ -259,7 +262,7 @@ descriptive.numerical(Data$ijp53)
 ## Comparing visual estimation vs digital evaluation of p53 expression
 Below are the density plots and boxplots of p53 immunohistochemical expression using visual estimation and digital evaluation. We also include a scatterplot showing the correlation between both methods.
 
-To aid in the visual display of data, we decided to transform the percentages of p53 expression into logarithms using *X~log~ = log(X + 1)* where *X* is the percentage of p53 expression and *log* is the base 10 logarithm of *X*.
+To aid in the visual display of data, we decided to transform the percentages of p53 expression into logarithms using *Xlog = log(X + 1)* where *X* is the percentage of p53 expression and *log* is the base 10 logarithm of *X*.
 
 
 ```r
@@ -305,7 +308,7 @@ ggplot(data = Data_Long, aes(x = method, y = value)) +
 ![](README_files/figure-html/p53visual_digital-2.png) 
 
 ```r
-descriptive.numerical.group(Data_Long$value, Data_Long$method)
+with(Data_Long, descriptive.numerical.group(value, method))
 ```
 
 
@@ -346,7 +349,7 @@ ggplot(data = Data_Long, aes(x = value[method == "Digital evaluation"], y = valu
 # Comparison of p53 expression with pathologic features
 Below is the comparison of p53 expression by visual estimation and digital evaluation considering histologic subtype and histologic grade. For this purpose we decided to use the mean values of p53 expression.
 
-To aid in the visual display of data, we decided to transform the percentages of p53 expression into logarithms using *X~log~ = log(X + 1)* where *X* is the percentage of p53 expression and *log* is the base 10 logarithm of *X*.
+To aid in the visual display of data, we decided to transform the percentages of p53 expression into logarithms using *Xlog = log(X + 1)* where *X* is the percentage of p53 expression and *log* is the base 10 logarithm of *X*.
 
 
 ```r
