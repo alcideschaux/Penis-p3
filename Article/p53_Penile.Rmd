@@ -1,0 +1,138 @@
+---
+title: Evaluation of p53 Immunohistochemical Expression Using Open-Source Software for Digital Image Analysis. A Tissue Microarray Study of Penile Squamous Cell Carcinomas
+author: Alcides Chaux, M.D.\footnote{Department of Scientific Research, Norte University, Asunción; Centro para el Desarrollo de la Investigación Científica (CEDIC), Asunción} Arthur L. Burnett, M.D.\footnote{Department of Urology, Johns Hopkins Medical Institutions, Baltimore, MD} George J. Netto, M.D.\footnote{Departments of Urology, Oncology, and Pathology, Johns Hopkins Medical Institutions, Baltimore, MD}
+output:
+  pdf_document:
+    includes:
+      after_body: doc_suffix.tex
+      before_body: doc_prefix.tex
+      in_header: header.tex
+  html_document: default
+fontsize: 11pt
+geometry: margin=2cm
+bibliography: References.bib
+csl: american-medical-association.csl
+abstract: The addition of molecular biomarkers is needed to increase the accuracy of pathologic factors as prognosticators of outcome in penile squamous cell carcinomas (SCC). Evaluation of these biomarkers is usually carried out by immunohistochemistry. Herein we assess p53 immunohistochemical expression on tissue samples of penile SCC using freely-available, open-source software packages for digital image analysis. We also compared the results of digital analysis with standard visual estimation. Percentages of p53 positive cells were higher by visual estimation than by digital analysis. However, correlation was high between both methods. Our study shows that evaluation of p53 immunohistochemical expression is feasible using open-source software packages for digital image analysis. Although our analysis was limited to penile SCC, the rationale should also hold for other tumor types in which evaluation of p53 immunohistochemical expression is required. This approach would reduce interobserver variability, and would provide a standardized method for reporting the results of immunohistochemical stains. As these diagnostic tools are freely-available online, researchers and practicing pathologists could incorporate them in their daily practice without increasing diagnostic costs.
+---
+
+```{r Script, echo = FALSE, warning = FALSE, message = FALSE}
+source("p53_Penile.R")
+```
+
+# Introduction
+Most penile tumors are squamous cell carcinomas (SCC) arising at the distal mucosa covering glans, coronal sulcus, or foreskin. Several pathologic features of the primary tumor, including histologic grade, tumor extent, and perineural invasion, have been established as prognosticators of outcome.[@Chaux2012; @Chaux2012a] However, additional markers are needed to increase the accuracy of these pathologic factors. With this goal, immunohistochemical expression of cell cycle-related markers has been used to estimate prognosis of penile SCC.[@Muneer2009] Nevertheless, differences in evaluation criteria hinder the comparison of series, thwarting the standardization of clinically-useful thresholds of immunohistochemical expression.
+
+Aiming to overcome these difficulties, digital image analysis using proprietary software has been proposed, either for research or clinical practice. However, the high costs of these diagnostic tools preclude their routine implementation. Herein we evaluate open-source software packages, freely available over the Internet, to analyze the immunoexpression levels of p53 in penile SCC. We provide universal resource locators (URLs) for downloading these packages, and a basic protocol for digital image analysis. Finally, we also compare the results of digital analysis with standard visual estimation of p53 immunohistochemical expression.
+
+# Material and Methods
+## Tissue Microarray Building and Immunohistochemistry
+A total of `r No_Cases` cases of formalin-fixed, paraffin-embedded penile SCC were used to build a tissue microarray (TMA) at the Johns Hopkins TMA Lab Core (Baltimore, MD). Each case was randomly sampled 3–9 times, depending on tumor size, yielding a total of `r nrow(Data)` tissue cores of 1 mm of diameter. Pathologic evaluation was done using previously published criteria.[@Chaux2012]
+
+Immunohistochemistry for p53 (antibody against p53, clone-BP53-11, Ventana Medical Systems, Inc. Tucson, AZ) was performed on automated systems from Ventana XT (Ventana Medical Systems, Inc. Tucson, AZ). The reaction was developed using streptavidin-HRP detection I-View kit (Ventana Medical Systems, Inc. Tucson, AZ). All sections were then counterstained with hematoxylin, dehydrated, and cover-slipped.
+
+## Evaluation of p53 Immunohistochemical Expression
+Each TMA spot was scanned using the APERIO system (Aperio Technologies, Inc., Vista, CA) and uploaded to TMAJ, an open-source platform for online evaluation of TMA images, available at <http://tmaj.pathology.jhmi.edu>. Images were scanned at a $20x$ resolution, yielding an image scale of $2.65 \mu/mm$. Percentage of p53 positive cells was then established using visual and digital analysis. For this purpose, images were downloaded from the TMAJ database to a local computer.
+
+For visual analysis, percentages of p53 positive nuclei were estimated by naked eye on a computer screen, without the use of any specialized software. For digital analysis, the open-source software ImageJ version 1.44, available at <http://rsb.info.nih.gov/ij>, was used along with the immunoratio plug-in, available at <http://imtmicroscope.uta.fi/immunoratio>.
+
+The immunoratio plug-in calculates the percentage of positively stained nuclear area (labeling index) by using a color deconvolution algorithm previously described by Tuominen *et al*.[@Tuominen2010] This deconvolution algorithm separates the staining components (diaminobenzidine and hematoxylin) based on user-defined thresholds for positive nuclei (brown pixels) and negative nuclei (blue pixels). These thresholds were adjusted in a training set of 5 randomly selected TMA spots, until at least 95% of nuclei were identified, either as positive or negative. The same algorithm was then used to estimate in batch the percentage of positive cells. Results were exported afterward to a database containing the pathologic features of the case.
+
+## Statistical Analysis
+Analyses were carried out spot by spot and using the pooled arithmetic mean of all the spots for each case. Percentages of p53 positive cells estimated by either visual or digital analyses were compared using the Wilcoxon matched-pairs sign-rank test. The correlation between the visual and the digital methods was evaluated using Spearman’s $\rho$ correlation coefficient. Spearman’s $\rho$ was interpreted as follows: $< 0.09$, no correlation; $0.10-0.29$, weak correlation; $0.30-0.49$, moderate correlation; $\geq 0.50$, strong correlation. Kruskal-Wallis test was used to compare percentages of p53 stratified by histologic subtype and histologic grade. A 2-tailed $P < 0.05$ was required for statistical significant. Data were analyzed using R version 3.2.2 ``Fire Safety''.[@RCoreTeam] The dataset and R scripts used for data analysis, as well as additional results (including the full analysis of the dataset), are freely available at <https://github.com/alcideschaux/Penis-p53.>
+
+\begin{figure*}
+  \centering
+  \includegraphics[width=\linewidth]{Fig1}
+  \caption{Output of digital analysis for p53 expression. The left figure is the original p53-stained tissue microarray spot. The right figure shows the results of the digital analysis. Detailed description of the algorithm used for digital analysis is provided at \url{http://imtmicroscope.uta.fi/immunoratio}.}
+  \label{Fig1}
+\end{figure*}
+
+\begin{figure*}
+\centering
+  \includegraphics[width=\linewidth]{Fig2}
+  \caption{Immunohistochemical Expression of p53 by Visual and Digital Evaluation. A) Boxplots showing the distribution of p53 positive cells with higher percentages using the visual estimation; B) Scatter plot of p53 immunohistochemical expression by visual estimation and digital analysis showing a high correlation between these 2 methods. The blue line represents the regression line. For both plots base-10 logarithmic transformation of p53 percentages were used to aid in data visualization.}
+  \label{Fig2}
+\end{figure*}
+
+\begin{table*}
+\centering
+\caption {Mean Percentage and Standard Deviation of p53 Positive Cells using Visual Estimation and Digital Analysis, by Histologic Subtype and Grade}
+\label{Tab1}
+\begin{tabular}{lccccc}
+\hline
+~ & No. cases & Visual estimation & P value & Digital estimation & P value \\
+\hline
+\textbf{Histologic subtype} & ~ & ~ & `r KW_p53_s` & ~ & `r KW_ijp53_s` \\
+\hspace{2ex} Usual SCC
+  & `r T1_s[1,2]`
+  & `r T1_p53_s[1,3]` (`r T1_p53_s[1,4]`)
+  & ~
+  & `r T1_p53_s[1,5]` (`r T1_p53_s[1,6]`)
+  & ~  \\
+\hspace{2ex} Warty-basaloid SCC
+  & `r T1_s[2,2]`
+  & `r T1_p53_s[2,3]` (`r T1_p53_s[2,4]`)
+  & ~
+  & `r T1_p53_s[2,5]` (`r T1_p53_s[2,6]`)
+  & ~ \\
+\hspace{2ex} Basaloid SCC
+  & `r T1_s[3,2]`
+  & `r T1_p53_s[3,3]` (`r T1_p53_s[3,4]`)
+  & ~
+  & `r T1_p53_s[3,5]` (`r T1_p53_s[3,6]`)
+  & ~ \\
+\hspace{2ex} Warty SCC
+  & `r T1_s[4,2]`
+  & `r T1_p53_s[4,3]` (`r T1_p53_s[4,4]`)
+  & ~
+  & `r T1_p53_s[4,5]` (`r T1_p53_s[4,6]`)
+  & ~ \\
+\hspace{2ex} Papillary SCC
+  & `r T1_s[5,2]`
+  & `r T1_p53_s[5,3]` (`r T1_p53_s[5,4]`)
+  & ~
+  & `r T1_p53_s[5,5]` (`r T1_p53_s[5,6]`)
+  & ~ \\
+\textbf{Histologic grade} & ~ & ~ & `r KW_p53_hg` & ~ & `r KW_ijp53_hg` \\
+\hspace{2ex} Grade 1
+  & `r T1_hg[1,2]`
+  & `r T1_p53_hg[1,3]` (`r T1_p53_hg[1,4]`)
+  & ~
+  & `r T1_p53_hg[1,5]` (`r T1_p53_hg[1,6]`)
+  & ~ \\
+\hspace{2ex} Grade 2
+  & `r T1_hg[2,2]`
+  & `r T1_p53_hg[2,3]` (`r T1_p53_hg[2,4]`)
+  & ~
+  & `r T1_p53_hg[2,5]` (`r T1_p53_hg[2,6]`)
+  & ~ \\
+\hspace{2ex} Grade 3
+  & `r T1_hg[3,2]`
+  & `r T1_p53_hg[3,3]` (`r T1_p53_hg[3,4]`)
+  & ~
+  & `r T1_p53_hg[3,5]` (`r T1_p53_hg[3,6]`)
+  & ~ \\
+\hline
+\end{tabular}
+\end{table*}
+
+# Results
+Table 1 shows the distribution of the `r No_Cases` cases by histologic subtype and histologic grade. Figure \ref{Fig1} shows scanned TMA spots of H&E and p53-stained tissue cores along with the output of the digital analysis for 1 TMA spot.
+
+Percentages of p53 immunoexpression were higher with the visual method (mean `r p53_Mean`%, SD `r p53_SD`%, range from `r p53_Min`% to `r p53_Max`%) than with the digital method (mean `r p53ij_Mean`%, SD `r p53ij_SD`%, range from `r p53ij_Min`% to `r p53ij_Max`%). This difference was statistically significant ($P = `r p53_Wilcox`$).
+
+Correlation between the visual and the digital methods was strong and statistically significant (Spearman's $\rho = `r p53_Spear_Est`, P = `r p53_Spear_P`$, Figure \ref{Fig2}). Expression levels of p53 according to histologic grade and histologic subtype by visual and digital estimations are shown in Table \ref{Tab1}.
+
+# Discussion
+This study demonstrates the feasibility of performing digital image analysis of p53 immunohistochemical expression using freely-available, open-source software packages. Our data suggest that visual analysis tends to overestimate the percentage of p53 positive cells. However, the high correlation between visual and digital analyses indicates that both methods are appropriate for estimating the relative levels of immunohistochemical expression. As described in this study, digital estimation of p53 expression could offer an inexpensive and more reliable approach for evaluating the results of immunohistochemical techniques. This approach would also be less time-consuming, less prone to interobserver variability, and the printed output could be easily added to the pathology report. The use of standardized methods would also allow the direct comparison of different studies, and the selection of clinically-applicable thresholds for defining diagnosis or treatment.
+
+In normal cells, the protein p53 plays a central role in the regulation of the cell cycle. Additionally, mutations in the tumor suppressor gene TP53, located on chromosome 17p13, have been identified in approximately 70% of adult solid tumors.[@Hollstein1991] Mutation of TP53 leads to either loss of the protein expression or, more frequently, expression of a mutant protein. [@Muneer2009] This mutant p53 then accumulates, resulting in an overexpression of the protein. This overexpression can be afterwards detected and quantified using standard diagnostic tools such as immunohistochemistry.
+
+Expression levels of p53 have been used as prognostic tools in several malignancies, including genitourinary tumors.[@Netto2011] On this regard, several studies have suggested that immunohistochemical p53 expresion is associated with prognosis in penile carcinomas. Lopes *et al* studied 82 patients with penile cancer treated by penectomy and bilateral inguinal lymphadenectomy.[@Lopes2002] They found that p53 positivity was associated with lymph node metastasis in univariate and multivariate models. They also found that patients with p53 negative tumors had a better 5-year and 10-year overall survival compared to those patients with p53 positive tumors. Martins *et al* studied 50 patients with penile cancer treated by penectomy.[@Martins2002] They found that p53 positivity was associated with tumor progression and disease-specific survival in both univariate and multivariate models. Finally, Zhu et al evaluated p53 expression in 73 patients treated by penectomy and inguinal lymphadenectomy.[@Zhu2007] They found that p53 positivity was associated with lymph node metastasis and cancer-specific survival in univariate and multivariate models. Besides its potential usefulness as prognosticator of outcome in penile carcinomas, p53 positivity could also aid in the differential diagnosis of penile intraepithelial lesions.[@Chaux2011] In this scenario, the accurate and reproducible evaluation of p53 immunohistochemical expression could have profound clinical implications.
+
+In summary, evaluation of p53 immunohistochemical expression is feasible using open-source software packages for digital image analysis. Although our analysis was limited to penile SCC, the rationale should also hold for other tumor types in which evaluation of p53 expression is required. This approach would reduce interobserver variability, and would provide a standardized method for reporting the results of immunohistochemical stains. As these diagnostic tools are freely available over the Internet, researchers and practicing pathologists could incorporate them in their daily practice without increasing diagnostic costs.
+
+# Acknowledgments
+We are in debt to Helen Fedor and Marcela Southerland, from the TMA Lab Core; Rajni Sharma, PhD, from the Immunopathology Lab; and Kristen L. Lecksell, BS, from the Pathology Department, at the Johns Hopkins Medical Institutions (Baltimore, MD).
+
+# References
