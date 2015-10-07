@@ -21,7 +21,7 @@ This repository also contains the following files:
 
 Data were analyzed using [R](http://www.r-project.org/) version 3.2.2 "Fire Safety" (R Foundation for Statistical Computing, Vienna, Austria). Results were written using R markdown inside [RStudio](http://www.rstudio.com/) version 0.99.441, powered by the [knitr](http://cran.r-project.org/web/packages/knitr/index.html) package version 1.11.
 
-```{r Global}
+```{r Global, message = FALSE}
 # Establishing global options
 library(knitr)
 opts_chunk$set(message = FALSE, warning = FALSE, fig.width = 9)
