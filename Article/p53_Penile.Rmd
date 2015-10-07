@@ -1,6 +1,6 @@
 ---
 title: Evaluation of p53 Immunohistochemical Expression Using Open-Source Software for Digital Image Analysis. A Tissue Microarray Study of Penile Squamous Cell Carcinomas
-author: Alcides Chaux, M.D.\footnote{Department of Scientific Research, Norte University, Asunción; Centro para el Desarrollo de la Investigación Científica (CEDIC), Asunción} Arthur L. Burnett, M.D.\footnote{Department of Urology, Johns Hopkins Medical Institutions, Baltimore, MD} George J. Netto, M.D.\footnote{Departments of Urology, Oncology, and Pathology, Johns Hopkins Medical Institutions, Baltimore, MD}
+author: Alcides Chaux, M.D.\footnote{Department of Pathology, Johns Hopkins Medical Institutions, Baltimore, MD; Department of Scientific Research, Norte University, Asunción; Centro para el Desarrollo de la Investigación Científica (CEDIC), Asunción} Arthur L. Burnett, M.D.\footnote{Department of Urology, Johns Hopkins Medical Institutions, Baltimore, MD} George J. Netto, M.D.\footnote{Departments of Urology, Oncology, and Pathology, Johns Hopkins Medical Institutions, Baltimore, MD}
 output:
   pdf_document:
     includes:

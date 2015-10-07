@@ -8,7 +8,7 @@ This repository contains the full statistical analysis of the dataset that was u
 
 This repository also contains the following files:
 
-* The [.pdf version](https://github.com/alcideschaux/Penis-p53/blob/master/Article/p53_Penile.pdf) of the article sent for consideration of publication
+* The [.pdf version](https://github.com/alcideschaux/Penis-p53/blob/master/Article/p53_Penile.pdf) of the article sent for consideration of publication, along whit the [.Rmd](https://github.com/alcideschaux/Penis-p53/blob/master/Article/p53_Penile.Rmd) file that was used for building the article
 * The [BibTeX](https://github.com/alcideschaux/Penis-p53/blob/master/Article/References.bib) file containing all the references cited in the article
 * The [R script](https://github.com/alcideschaux/Penis-p53/blob/master/Article/p53_Penile.R) that was used for analyzing the dataset and writing the article
 * The [R Markdown](https://github.com/alcideschaux/Penis-p53/blob/master/README.Rmd) file used for this report
@@ -191,7 +191,11 @@ descriptive.categorical(Data_Wide$grade)
 # Distribution of p53 immunohistochemical expression
 Evaluation of p53 expression was carried out spot by spot. Each TMA spot was scanned using the APERIO system (Aperio Technologies, Inc., Vista, CA) and uploaded to TMAJ, an open-source platform for online evaluation of TMA images, available at <http://tmaj.pathology.jhmi.edu>. Images were scanned at a 20x resolution, yielding an image scale of 2.65 u/mm. Images were downloaded from the TMAJ database to a local computer.
 
-Immunohistochemical expression of p53 was evaluated using 2 methods: visual estimation and digital evaluation. Each method is described in a separate subsetion.
+Immunohistochemical expression of p53 was evaluated using 2 methods: visual estimation and digital evaluation. Each method is described in a separate subsetion. Below we include the output of digital analysis for p53 expression. 
+
+![](Article/Fig1_lowres.png)
+
+The left figure is the original p53-stained tissue microarray spot. The right figure shows the results of the digital analysis. Detailed description of the algorithm used for digital analysis is provided at <http://imtmicroscope.uta.fi/immunoratio>.
 
 ## Visual estimation of p53 expression
 For visual analysis, percentages of p53 positive nuclei were estimated by naked eye on a computer screen, without the use of any specialized software. The distribution of p53 expression by visual estimation is shown below.
