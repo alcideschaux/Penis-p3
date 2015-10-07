@@ -1,9 +1,8 @@
 ---
-title: Evaluation of p53 Immunohistochemical Expression Using Open-Source Software for Digital Image Analysis. A Tissue Microarray Study of Penile Squamous Cell Carcinomas
+title: "Evaluation of p53 Immunohistochemical Expression Using Open-Source Software for Digital Image Analysis: A Tissue Microarray Study of Penile Squamous Cell Carcinomas"
 output: 
   html_document: 
     keep_md: yes
-    theme: united
 ---
 
 # Summary
@@ -56,7 +55,7 @@ As seen, the dataset consists of a 156 x 6 data frame. Each row corresponds to a
 * `p53`: p53 expression in percentage of positive cells evaluated by visual examination (i.e., naked eye in a computer screen).
 * `ijp53`: p53 expression in percentage of positive cells evaluated by digital examination (i.e., using ImageJ).
 
-To improve visualization we revalue/modify the levels of `grade` and `subtype`.
+To improve visualization we revalue/modify the levels of `grade` and `subtype`. We also change the structure of the latter from character to factor, for proper data analysis.
 
 ```{r DataWrangling}
 Data$grade <- factor(Data$grade, ordered = TRUE)
@@ -67,6 +66,7 @@ Data$grade <- plyr::revalue(Data$grade,
     "3" = "Grade 3")
   )
 Data$subtype <- Data$subtype %>% str_to_title()
+Data$subtype <- factor(Data$subtype)
 ```
 
 ***
@@ -125,7 +125,7 @@ descriptive.categorical(Data_Wide$grade)
 ***
 
 # Distribution of p53 immunohistochemical expression
-Evaluation of p53 expression was carried out spot by spot. Each TMA spot was scanned using the APERIO system (Aperio Technologies, Inc., Vista, CA) and uploaded to TMAJ, an open-source platform for online evaluation of TMA images, available at <http://tmaj.pathology.jhmi.edu>. Images were scanned at a $20x$ resolution, yielding an image scale of $2.65 \mu/mm$. Images were downloaded from the TMAJ database to a local computer.
+Evaluation of p53 expression was carried out spot by spot. Each TMA spot was scanned using the APERIO system (Aperio Technologies, Inc., Vista, CA) and uploaded to TMAJ, an open-source platform for online evaluation of TMA images, available at <http://tmaj.pathology.jhmi.edu>. Images were scanned at a 20x resolution, yielding an image scale of 2.65 u/mm. Images were downloaded from the TMAJ database to a local computer.
 
 Immunohistochemical expression of p53 was evaluated using 2 methods: visual estimation and digital evaluation. Each method is described in a separate subsetion.
 
@@ -224,7 +224,7 @@ ggplot(data = Data_Long, aes(x = value[method == "Digital evaluation"], y = valu
 # Comparison of p53 expression with pathologic features
 Below is the comparison of p53 expression by visual estimation and digital evaluation considering histologic subtype and histologic grade. For this purpose we decided to use the mean values of p53 expression.
 
-To aid in the visual display of data, we decided to transform the percentages of p53 expression into logarithms using *Xlog = log(X + 1)* where *X* is the percentage of p53 expression and *log* is the base 10 logarithm of *X*.
+To aid in the visual display of data, we decided to transform the percentages of p53 expression into logarithms using *Xlog = log(X + 1)* where *X* is the percentage of p53 expression and *log* is the base 10 logarithm of *X*. We will show both raw percentages and transformed percentages.
 
 ```{r p53_avg}
 # Calculating p53 mean expression by visual estimation and digital evaluation
@@ -241,7 +241,21 @@ Data_AVG <- Data %>%
 
 ```{r p53_subtype}
 # Comparing p53 mean expression (visual estimation) by histologic subtype
-p53_subtype <- kruskal.test(subtype ~ p53, data = Data_AVG)$p.value
+## Raw percentages
+p53_subtype <- kruskal.test(p53 ~ subtype, data = Data)$p.value
+p53_subtype <- format(p53_subtype, digits = 2, scientific = TRUE)
+ggplot(data = Data, aes(x = subtype, y = p53, fill = subtype)) +
+  geom_boxplot() +
+  scale_y_continuous(limits = c(0, 110), breaks = seq(0, 100, 20)) +
+  annotate("text", label = paste("Kruskal-Wallis P value =", p53_subtype),
+    y = 110, x = 3, hjust = 0.5) +
+  ggtitle("Comparison of p53 immunohistochemical expression \n(visual estimation) by histologic subtype") +
+  xlab("Histologic subtype") +
+  ylab("p53 expression, %") +  
+  gtheme + theme(legend.position = "none")
+with(Data, descriptive.numerical.group(p53, subtype))
+## Transformed percentages
+p53_subtype <- kruskal.test(p53 ~ subtype, data = Data_AVG)$p.value
 p53_subtype <- format(p53_subtype, digits = 2, scientific = TRUE)
 ggplot(data = Data_AVG, aes(x = subtype, y = p53, fill = subtype)) +
   geom_boxplot() +
@@ -254,7 +268,22 @@ ggplot(data = Data_AVG, aes(x = subtype, y = p53, fill = subtype)) +
   gtheme + theme(legend.position = "none")
 with(Data_AVG, descriptive.numerical.group(p53, subtype))
 # Comparing p53 mean expression (digital evaluation) by histologic subtype
-ijp53_subtype <- kruskal.test(subtype ~ ijp53, data = Data_AVG)$p.value
+## Raw percentages
+ijp53_subtype <- kruskal.test(ijp53 ~ subtype, data = Data)$p.value
+ijp53_subtype <- format(ijp53_subtype, digits = 2, scientific = TRUE)
+ggplot(data = Data, aes(x = subtype, y = ijp53, fill = subtype)) +
+  geom_boxplot() +
+  scale_y_continuous(limits = c(0, 50), breaks = seq(0, 50, 10)) +
+  annotate("text", label = paste("Kruskal-Wallis P value =", ijp53_subtype),
+    y = 50, x = 3, hjust = 0.5) +
+  ggtitle("Comparison of p53 immunohistochemical expression \n(digital evaluation) by histologic subtype") +
+  xlab("Histologic subtype") +
+  ylab("p53 expression, %") +  
+  gtheme +
+  theme(legend.position = "none")
+with(Data, descriptive.numerical.group(ijp53, subtype))
+## Transformed percentages
+ijp53_subtype <- kruskal.test(ijp53 ~ subtype, data = Data_AVG)$p.value
 ijp53_subtype <- format(ijp53_subtype, digits = 2, scientific = TRUE)
 ggplot(data = Data_AVG, aes(x = subtype, y = ijp53, fill = subtype)) +
   geom_boxplot() +
@@ -275,7 +304,23 @@ with(Data_AVG, descriptive.numerical.group(ijp53, subtype))
 
 ```{r p53_grade}
 # Comparing p53 mean expression (visual estimation) by histologic grade
-p53_grade <- kruskal.test(grade ~ p53, data = Data_AVG)$p.value
+## Raw percentages
+p53_grade <- kruskal.test(p53 ~ grade, data = Data)$p.value
+p53_grade <- format(p53_grade, digits = 2, scientific = TRUE)
+Data_nona <- Data %>% filter(!is.na(grade))
+ggplot(data = Data_nona, aes(x = grade, y = p53, fill = grade)) +
+  geom_boxplot() +
+  scale_y_continuous(limits = c(0, 110), breaks = seq(0, 100, 20)) +
+  annotate("text", label = paste("Kruskal-Wallis P value =", p53_grade),
+    y = 110, x = 2, hjust = 0.5) +
+  ggtitle("Comparison of p53 immunohistochemical expression \n(visual estimation) by histologic grade") +
+  xlab("Histologic grade") +
+  ylab("p53 expression, %") +  
+  gtheme +
+  theme(legend.position = "none")
+with(Data, descriptive.numerical.group(p53, grade))
+## Transformed percentages
+p53_grade <- kruskal.test(p53 ~ grade, data = Data_AVG)$p.value
 p53_grade <- format(p53_grade, digits = 2, scientific = TRUE)
 ggplot(data = Data_AVG, aes(x = grade, y = p53, fill = grade)) +
   geom_boxplot() +
@@ -289,7 +334,22 @@ ggplot(data = Data_AVG, aes(x = grade, y = p53, fill = grade)) +
   theme(legend.position = "none")
 with(Data_AVG, descriptive.numerical.group(p53, grade))
 # Comparing p53 mean expression (digital evaluation) by histologic grade
-ijp53_grade <- kruskal.test(grade ~ ijp53, data = Data_AVG)$p.value
+## Raw percentages
+ijp53_grade <- kruskal.test(ijp53 ~ grade, data = Data)$p.value
+ijp53_grade <- format(ijp53_grade, digits = 2, scientific = TRUE)
+ggplot(data = Data_nona, aes(x = grade, y = ijp53, fill = grade)) +
+  geom_boxplot() +
+  scale_y_continuous(limits = c(0, 50), breaks = seq(0, 50, 10)) +
+  annotate("text", label = paste("Kruskal-Wallis P value =", ijp53_grade),
+    y = 50, x = 2, hjust = 0.5) +
+  ggtitle("Comparison of p53 immunohistochemical expression \n(digital evaluation) by histologic grade") +
+  xlab("Histologic grade") +
+  ylab("p53 expression, %") +  
+  gtheme +
+  theme(legend.position = "none")
+with(Data, descriptive.numerical.group(ijp53, grade))
+## Transformed percentages
+ijp53_grade <- kruskal.test(ijp53 ~ grade, data = Data_AVG)$p.value
 ijp53_grade <- format(ijp53_grade, digits = 2, scientific = TRUE)
 ggplot(data = Data_AVG, aes(x = grade, y = ijp53, fill = grade)) +
   geom_boxplot() +
@@ -311,7 +371,7 @@ Evaluation of p53 immunohistochemical expression is feasible using open-source s
 
 # Authors
 * __Alcides Chaux, M.D.__ _Department of Pathology, Johns Hopkins Medical Institutions, Baltimore, MD; Department of Scientific Research, Norte University, Asunción._ Dr. Chaux was in charge of evaluation of p53 immunohistochemical expression, data analysis, and drafting of the manuscript.
-* __George J. Netto, M.D.__ _Departments of Urology, Oncology, and Pathology, Johns Hopkins Medical Institutions, Baltimore, MD._ Dr. Netto was in charge of histopathological diagnosis, evaluation of 53 immunohistochemical expression, and supervision of the study.
-* __Arthur L. Burnett, M.D.__ _Department of Urology, Johns Hopkins Medical Institutions, Baltimore, MD._ Dr. Burnett was in charge of supervision of the study.
+* __George J. Netto, M.D.__ _Departments of Urology, Oncology, and Pathology, Johns Hopkins Medical Institutions, Baltimore, MD._ Dr. Netto was in charge of histopathological diagnosis, evaluation of 53 immunohistochemical expression, and study design and supervision.
+* __Arthur L. Burnett, M.D.__ _Department of Urology, Johns Hopkins Medical Institutions, Baltimore, MD._ Dr. Burnett was in charge study design and supervision.
 
 All authors read and approved the final manuscript. Authors declare no conflict of interests.
