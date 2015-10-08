@@ -250,7 +250,7 @@ descriptive.numerical(Data$ijp53)
 ## Comparing visual estimation vs digital evaluation of p53 expression
 Below are the density plots and boxplots of p53 immunohistochemical expression using visual estimation and digital evaluation. We also include a scatterplot showing the correlation between both methods.
 
-To aid in the visual display of data, we decided to transform the percentages of p53 expression into logarithms using *Xlog = log(X + 1)* where *X* is the percentage of p53 expression and *log* is the base 10 logarithm of *X*.
+To aid in the visual display of data, we decided to transform the percentages of p53 expression into logarithms using *Xlog = log(X + 1)* where *X* is the percentage of p53 expression and *log* is the base 10 logarithm of *X*. We will show both raw percentages and transformed percentages.
 
 
 ```r
@@ -260,6 +260,7 @@ Data_Long <- Data %>%
   gather(method, value, p53:ijp53) %>%
   mutate(
     method = ifelse(method == "p53", "Visual estimation", "Digital evaluation"),
+    raw = value,
     value = log10(value + 1)
     )
 # Density plots for p53 expression
@@ -275,6 +276,56 @@ ggplot(data = Data_Long, aes(x = value, fill = method)) +
 
 ```r
 # Boxplots for p53 expression
+## Raw percentages
+p53_box <- with(data = Data_Long, wilcox.test(
+  x = raw[method == "Digital evaluation"],
+  y = raw[method == "Visual estimation"],
+  paired = TRUE
+  )$p.value
+)
+p53_box <- format(p53_box, digits = 2, scientific = TRUE)
+ggplot(data = Data_Long, aes(x = method, y = raw)) +
+  geom_boxplot(aes(fill = method), color= "black") +
+  scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, 20)) +
+  annotate("text",
+    label = paste("Wilcoxon P value =", p53_box),
+    x = 1.5, y = 100) +
+  ggtitle("Comparison of p53 immunohistochemical expression \nby visual estimation vs digital evaluation") +
+  xlab("Method of evaluation of p53 expression") +
+  ylab("p53 expression, %") +  
+  gtheme + theme(legend.title = element_blank())
+```
+
+![](README_files/figure-html/p53visual_digital-2.png) 
+
+```r
+ggplot(data = Data_Long, aes(x = seq_along(raw), y = raw)) +
+  geom_point(aes(color = method), size = 4, shape = 1) +
+  scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, 20)) +
+  ggtitle("Distribution of percentages of p53 immunohistochemical \nexpression on a spot-by-spot basis by estimation methods") +
+  xlab("TMA spot index") + ylab("p53 expression, %") +
+  gtheme + theme(legend.title = element_blank())
+```
+
+![](README_files/figure-html/p53visual_digital-3.png) 
+
+```r
+with(Data_Long, descriptive.numerical.group(raw, method))
+```
+
+
+
+|                    | Digital evaluation | Visual estimation |
+|:-------------------|:------------------:|:-----------------:|
+|Mean                |        4.7         |       23.4        |
+|Standard Deviation  |        7.6         |       32.4        |
+|Median              |        1.5         |       10.0        |
+|Interquartile Range |        5.5         |       29.0        |
+|Minimum             |        0.0         |        0.0        |
+|Maximum             |        43.4        |       99.0        |
+
+```r
+## Transformed percentages
 p53_box <- with(data = Data_Long, wilcox.test(
   x = value[method == "Digital evaluation"],
   y = value[method == "Visual estimation"],
@@ -290,10 +341,10 @@ ggplot(data = Data_Long, aes(x = method, y = value)) +
   ggtitle("Comparison of p53 immunohistochemical expression \nby visual estimation vs digital evaluation") +
   xlab("Method of evaluation of p53 expression") +
   ylab("p53 expression, log %") +  
-  gtheme
+  gtheme + theme(legend.title = element_blank())
 ```
 
-![](README_files/figure-html/p53visual_digital-2.png) 
+![](README_files/figure-html/p53visual_digital-4.png) 
 
 ```r
 with(Data_Long, descriptive.numerical.group(value, method))
@@ -332,7 +383,7 @@ ggplot(data = Data_Long, aes(x = value[method == "Digital evaluation"], y = valu
   gtheme
 ```
 
-![](README_files/figure-html/p53visual_digital-3.png) 
+![](README_files/figure-html/p53visual_digital-5.png) 
 
 # Comparison of p53 expression with pathologic features
 Below is the comparison of p53 expression by visual estimation and digital evaluation considering histologic subtype and histologic grade. For this purpose we decided to use the mean values of p53 expression.

@@ -168,7 +168,7 @@ descriptive.numerical(Data$ijp53)
 ## Comparing visual estimation vs digital evaluation of p53 expression
 Below are the density plots and boxplots of p53 immunohistochemical expression using visual estimation and digital evaluation. We also include a scatterplot showing the correlation between both methods.
 
-To aid in the visual display of data, we decided to transform the percentages of p53 expression into logarithms using *Xlog = log(X + 1)* where *X* is the percentage of p53 expression and *log* is the base 10 logarithm of *X*.
+To aid in the visual display of data, we decided to transform the percentages of p53 expression into logarithms using *Xlog = log(X + 1)* where *X* is the percentage of p53 expression and *log* is the base 10 logarithm of *X*. We will show both raw percentages and transformed percentages.
 
 ```{r p53visual_digital}
 # Reshaping the data into long format
@@ -177,6 +177,7 @@ Data_Long <- Data %>%
   gather(method, value, p53:ijp53) %>%
   mutate(
     method = ifelse(method == "p53", "Visual estimation", "Digital evaluation"),
+    raw = value,
     value = log10(value + 1)
     )
 # Density plots for p53 expression
@@ -187,6 +188,32 @@ ggplot(data = Data_Long, aes(x = value, fill = method)) +
   gtheme +
   theme(legend.title = element_blank())
 # Boxplots for p53 expression
+## Raw percentages
+p53_box <- with(data = Data_Long, wilcox.test(
+  x = raw[method == "Digital evaluation"],
+  y = raw[method == "Visual estimation"],
+  paired = TRUE
+  )$p.value
+)
+p53_box <- format(p53_box, digits = 2, scientific = TRUE)
+ggplot(data = Data_Long, aes(x = method, y = raw)) +
+  geom_boxplot(aes(fill = method), color= "black") +
+  scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, 20)) +
+  annotate("text",
+    label = paste("Wilcoxon P value =", p53_box),
+    x = 1.5, y = 100) +
+  ggtitle("Comparison of p53 immunohistochemical expression \nby visual estimation vs digital evaluation") +
+  xlab("Method of evaluation of p53 expression") +
+  ylab("p53 expression, %") +  
+  gtheme + theme(legend.title = element_blank())
+ggplot(data = Data_Long, aes(x = seq_along(raw), y = raw)) +
+  geom_point(aes(color = method), size = 4, shape = 1) +
+  scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, 20)) +
+  ggtitle("Distribution of percentages of p53 immunohistochemical \nexpression on a spot-by-spot basis by estimation methods") +
+  xlab("TMA spot index") + ylab("p53 expression, %") +
+  gtheme + theme(legend.title = element_blank())
+with(Data_Long, descriptive.numerical.group(raw, method))
+## Transformed percentages
 p53_box <- with(data = Data_Long, wilcox.test(
   x = value[method == "Digital evaluation"],
   y = value[method == "Visual estimation"],
@@ -202,7 +229,7 @@ ggplot(data = Data_Long, aes(x = method, y = value)) +
   ggtitle("Comparison of p53 immunohistochemical expression \nby visual estimation vs digital evaluation") +
   xlab("Method of evaluation of p53 expression") +
   ylab("p53 expression, log %") +  
-  gtheme
+  gtheme + theme(legend.title = element_blank())
 with(Data_Long, descriptive.numerical.group(value, method))
 # Correlation between methods of evaluating p53 expression
 p53_cor <- with(data = Data_Long, cor.test(

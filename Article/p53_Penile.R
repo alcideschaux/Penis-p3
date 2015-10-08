@@ -33,7 +33,7 @@ p53ij_Max <- round(max(Data$ijp53, na.rm = TRUE), 1)
 
 # Inferential Statistics
 # p53 visual vs digital estimation
-p53_Wilcox <- format(wilcox.test(Data$p53, Data$ijp53)$p.value, digits = 2)
+p53_Wilcox <- format(wilcox.test(Data$p53, Data$ijp53, paired = TRUE)$p.value, digits = 2)
 p53_Spear <- cor.test(Data$p53, Data$ijp53, method = "spearman")
 p53_Spear_Est <- round(p53_Spear$estimate, 2)
 p53_Spear_P <- format(p53_Spear$p.value, digits = 2)
